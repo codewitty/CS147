@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <TFT_eSPI.h>
-
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_CAP1188.h>
@@ -95,6 +94,4 @@ void loop() {
   //counter();
   
   touchedSensors();
-
- 
 }
