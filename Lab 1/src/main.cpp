@@ -16,16 +16,16 @@ int y = tft.height() / 2;
 
 // TOUCH SENSORS I2C ****
 // // Or...Use I2C, with reset pin
-// Adafruit_CAP1188 cap = Adafruit_CAP1188(CAP1188_RESET);
+//Adafruit_CAP1188 cap = Adafruit_CAP1188(CAP1188_RESET);
 
 // TOUCH SENSORS SOFTWARE SPI ****
 // CS pin is used for software or hardware SPI
-#define CAP1188_CS  10
+#define CAP1188_CS  26
 // These are defined for software SPI, for hardware SPI, check your 
 // board's SPI pins in the Arduino documentation
-#define CAP1188_MOSI  11
-#define CAP1188_MISO  12
-#define CAP1188_CLK  13
+#define CAP1188_MOSI  32
+#define CAP1188_MISO  33
+#define CAP1188_CLK  25
 
 // Or.. Software SPI: clock, miso, mosi, cs, reset
 Adafruit_CAP1188 cap = Adafruit_CAP1188(CAP1188_CLK, CAP1188_MISO, CAP1188_MOSI, CAP1188_CS, CAP1188_RESET);
@@ -47,8 +47,6 @@ void setup() {
     while (1);
   }
   tft.println("CAP1188 found!");
-
-  
 }
 
 // void counter(){
@@ -91,7 +89,7 @@ void touchedSensors(){
 }
 
 void loop() {
+
   //counter();
-  
   touchedSensors();
 }
