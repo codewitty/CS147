@@ -94,7 +94,9 @@ void loop()
 
     break;
   case RED_YELLOW_STATE:
-    Serial.print("RED YELLOW state.";)
+    Serial.print("RED YELLOW state.");
+    digitalWrite(BUZZ_PIN, HIGH);
+
     // yellow light
     digitalWrite(YELLOW_PIN, HIGH);
     // red light
@@ -118,6 +120,7 @@ void loop()
     break; 
   case YELLOW_STATE:
     Serial.print("YELLOW state.");
+    digitalWrite(BUZZ_PIN, HIGH);
     // yellow light
     digitalWrite(YELLOW_PIN, HIGH);    
 
