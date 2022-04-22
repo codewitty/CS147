@@ -51,7 +51,7 @@ void setup()
   tl_timer = millis() + RED_MILLIS;
 
   // Intialize buzzing.
-  buzz = 1;
+  buzz = 0;
   tl_buzzer = millis() + 250;
   digitalWrite(BUZZ_PIN, HIGH);
 
@@ -94,9 +94,8 @@ void loop()
 
     break;
   case RED_YELLOW_STATE:
-    Serial.print("RED YELLOW state.");
     digitalWrite(BUZZ_PIN, HIGH);
-
+    Serial.print("RED YELLOW state.");
     // yellow light
     digitalWrite(YELLOW_PIN, HIGH);
     // red light
@@ -119,8 +118,8 @@ void loop()
   
     break; 
   case YELLOW_STATE:
-    Serial.print("YELLOW state.");
     digitalWrite(BUZZ_PIN, HIGH);
+    Serial.print("YELLOW state.");
     // yellow light
     digitalWrite(YELLOW_PIN, HIGH);    
 
@@ -149,11 +148,11 @@ void loop()
     // buzzer check
     if (buzz == 1 && tl_buzzer <= millis()){
       tl_buzzer = millis() + 1500;
-      digitalWrite(BUZZ_PIN, LOW);
+      digitalWrite(BUZZ_PIN, HIGH);
       buzz = 0;
     } else if (buzz == 0 && tl_buzzer <= millis()){
       tl_buzzer = millis() + 500;
-      digitalWrite(BUZZ_PIN, HIGH);
+      digitalWrite(BUZZ_PIN, LOW);
       buzz = 1;
     }
 
