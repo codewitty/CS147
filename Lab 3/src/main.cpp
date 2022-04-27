@@ -5,8 +5,8 @@
 
 // This example downloads the URL "http://arduino.cc/"
 
-char ssid[] = "Guatauba";    // your network SSID (name) 
-char pass[] = "L0QueY0Quier0EsUnaGata"; // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "";    // your network SSID (name) 
+char pass[] = ""; // your network password (use for WPA, or use as key for WEP)
 
 // Name of the server we want to connect to
 const char kHostname[] = "worldtimeapi.org";
