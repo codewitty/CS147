@@ -35,7 +35,7 @@ const int kNetworkTimeout = 30*1000;
 const int kNetworkDelay = 1000;
 
 // Initialize DHT sensor.
-cDHT dht(DHTPIN, DHTTYPE);
+DHT dht(DHT_PIN, DHTTYPE);
 
 void setup() {
   Serial.begin(9600);
@@ -174,5 +174,4 @@ void loop() {
 
   // And just stop, now that we've tried a download
   while(1);
-}
 }
