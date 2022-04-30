@@ -3,8 +3,10 @@
 #include <HttpClient.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
+#include <string>
+#include <iostream>
 
-#define DHT_PIN 2 // digital pin connected to the DHT sensor
+#define DHT_PIN 32 // digital pin connected to the DHT sensor
 
 // Uncomment whatever type you're using!
 //#define DHTTYPE DHT11   // DHT 11
@@ -20,14 +22,16 @@
 // Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
 
 
-char ssid[] = "[YOUR_SSID]";    // your network SSID (name) FIXME
-char pass[] = "[YOUR_PASSWORD]"; // your network password (use for WPA, or use as key for WEP) FIXME
+char ssid[] = "UCInet Mobile Access";    // your network SSID (name) FIXME
+char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
 
 // Name of the server we want to connect to
-const char kHostname[] = "worldtimeapi.org";  // FIXME
+const char kHostname[] = "3.80.9.254";  // FIXME
 // Path to download (this is the bit after the hostname in the URL
 // that you want to download
-const char kPath[] = "/api/timezone/Europe/London.txt"; // FIXME
+std::string kPath = "/?temp="; // FIXME
+
+const int kport = 5000;
 
 // Number of milliseconds to wait without receiving any data before we give up
 const int kNetworkTimeout = 30*1000;
@@ -44,6 +48,7 @@ void setup() {
   delay(1000);
   Serial.println();
   Serial.println();
+  Serial.print(WiFi.macAddress());
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
@@ -65,8 +70,9 @@ void setup() {
 }
 
 void loop() {
+  Serial.print("Starting Loop...");
   // Wait a few seconds between measurements.
-  delay(2000);
+  //delay(2000);
 
   // Reading temperature or humidity takes about 250 milliseconds!
   // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
@@ -103,8 +109,9 @@ void loop() {
   
   WiFiClient c;
   HttpClient http(c);
-  
-  err = http.get(kHostname, kPath);
+  kPath = "/?temp=" + std::to_string(t) + "&humidity=" + std::to_string(h) + "&heat=" + std::to_string(hic);
+  const char* path = kPath.c_str();
+  err = http.get(kHostname, kport, path);
   if (err == 0)
   {
     Serial.println("startedRequest ok");
