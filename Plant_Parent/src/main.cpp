@@ -54,3 +54,19 @@ void soilMoistureSensor(){
   Serial.println(moistValue); 
 
 }
+
+
+void uvSensor(){
+
+  uvValue = analogRead(UVIN);
+  refValue = analogRead(REF_3v3);
+
+  outputVoltage = 3.3 / refValue * uvValue;
+  uvIntensity = (outputVoltage - 0.99) * (15) / (2.8 - 0.99);
+
+  Serial.print("UV Sensor: ");
+  Serial.println(uvValue);
+
+  Serial.print("UV Intensity: ");
+  Serial.println(uvIntensity);  
+}
