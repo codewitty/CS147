@@ -31,8 +31,9 @@ float uvIntensity = 0;
 
 // WiFi set up
 
-//char ssid[] = "";    // your network SSID (name) FIXME
-//char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
+char ssid[] = "";    // your network SSID (name) FIXME
+char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
+
 
 // Name of the server we want to connect to
 const char kHostname[] = "44.202.225.24";  // FIXME
@@ -50,7 +51,33 @@ const int kNetworkDelay = 1000;
 
 void setup() { 
   Serial.begin(9600);
-  delay(10);
+  delay(1000);
+  WiFi.mode(WIFI_STA);
+  Serial.println("scan start");
+
+  // WiFi.scanNetworks will return the number of networks found
+  int n = WiFi.scanNetworks();
+  Serial.println("scan done");
+  if (n == 0) {
+      Serial.println("no networks found");
+  } else {
+    Serial.print(n);
+    Serial.println(" networks found");
+    for (int i = 0; i < n; ++i) {
+      // Print SSID and RSSI for each network found
+      Serial.print(i + 1);
+      Serial.print(": ");
+      Serial.print(WiFi.SSID(i));
+      Serial.print(" (");
+      Serial.print(WiFi.RSSI(i));
+      Serial.print(")");
+      Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+      delay(10);
+    }
+  }
+
+  Serial.println();
+  Serial.println();
   Serial.println(WiFi.macAddress());
   Serial.println("Connecting to ");
   Serial.println(ssid);
@@ -58,6 +85,7 @@ void setup() {
   WiFi.begin(ssid, pass);
 
   while (WiFi.status() != WL_CONNECTED) {
+      Serial.println(WiFi.status());
       delay(500);
       Serial.print("Connecting....");
   }
@@ -81,6 +109,8 @@ void setup() {
 void loop() { 
   // Soil Moisture
   moistValue = soilMoistureSensor();
+  Serial.println();
+  Serial.print("\n");
   Serial.print("Soil Moisture Sensor: ");
   Serial.println(moistValue);
   // UV Sensor
@@ -91,7 +121,7 @@ void loop() {
   display();
   delay(30);
 
-    int err =0;
+  int err =0;
   
   WiFiClient c;
   HttpClient http(c);
@@ -101,7 +131,7 @@ void loop() {
   uu << uvValue;
   std::string s(ss.str());
   std::string uv(uu.str());
-  kPath = "/?Soil_Moisture= " + s + "&UV_Sensor= " + uv;
+  kPath = "/?Soil_Moisture=" + s + "&UV_Sensor=" + uv;
   const char* path = kPath.c_str();
   err = http.get(kHostname, kport, path);
   if (err == 0)
@@ -172,7 +202,7 @@ void loop() {
   http.stop();
 
   // And just stop, now that we've tried a download
-  while(1);
+  //while(1);
 } 
 
 
