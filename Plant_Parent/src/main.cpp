@@ -38,6 +38,7 @@ void setup() {
 void loop() {  
   soilMoistureSensor();
   uvSensor();
+  diplay();
   delay(30); 
 } 
 
@@ -69,4 +70,17 @@ void uvSensor(){
 
   Serial.print("UV Intensity: ");
   Serial.println(uvIntensity);  
+}
+
+void display(){
+  tft.setTextDatum(TC_DATUM); // Centre text on x,y
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextColor(TFT_GREEN, TFT_BLACK);  // Adding a black background colour erases previous text automatically
+  tft.setCursor(x, y, 2);
+
+  tft.drawString("Soil Moisture Sensor:", x, y-50, 4);
+  tft.drawFloat(moistValue, 0, x, y-25, 4);
+
+  tft.drawString("UV:", x, y+25, 4);
+  tft.drawFloat(uvValue, 0, x, y+50, 4);
 }
