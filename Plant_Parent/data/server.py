@@ -12,18 +12,17 @@ def hello():
     data.append(UV)
     string = f'Moisture: {moisture}, UV intensity:{UV}'
     print(string)
-    print(f'Data: {data}')
+    f = open("data.txt", "a")
+    f.write(data[0] + "," + data[1])
+    f.close()
     return render_template("results.html",data = data)
 
 @app.route('/result',methods = ['POST', 'GET'])
 def result():
    if request.method == 'GET':
        print("Inside POST")
-       data = []
-       moisture = str(request.values.get("Soil_Moisture"))
-       UV = str(request.values.get("UV_Sensor"))
-       data.append(UV)
-       data.append(moisture)
+       f = open('data.txt', 'r')
+       data = f.read().split(',')
        return render_template("results.html",data = data)
 
 
