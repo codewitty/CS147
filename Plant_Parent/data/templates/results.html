@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../static/css/screen.css" />
+	<title>Plant Parent</title>
+</head>
+
+<body onload="initialize()">
+		
+		<div class="header">
+			<div class="headerTitle">Plant Parent</div>
+		</div>
+		<h1>Results:</h1>
+		<h1> {{data}} </h1>
+		{% for datas in data %}
+
+		<h1> {{datas}} </h1>
+
+		{% endfor %}
+		<p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data[0] }} <b>UV Sensor Value :</b> {{ data[1] }}</p> 
+		<img id="img" onclick="myFunction()" src="../static/sad.jpeg" , width="400" height="400">
+		<script>
+		function myFunction() {
+			var image = document.getElementById("img");
+			if(image.src.match("../static/happy.jpeg")) {
+				image.src = "../static/sad.jpeg";
+			} else {
+				image.src = "../static/happy.jpeg";
+			}
+		</script>
+</body>
+
+</html>
