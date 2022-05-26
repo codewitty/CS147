@@ -2,10 +2,12 @@
 #include <TFT_eSPI.h>
 #include <Wire.h>
 #include <WiFi.h>
-#include <HttpClient.h>
+#include <HTTPClient.h>
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <Arduino_JSON.h>
+
 
 
 int soilMoistureSensor();
@@ -31,15 +33,24 @@ float uvIntensity = 0;
 
 // WiFi set up
 
-char ssid[] = "";    // your network SSID (name) FIXME
-char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
+char ssid[] = "dunder_mifflin";    // your network SSID (name) FIXME
+char pass[] = "thatswhatshesaid69"; // your network password (use for WPA, or use as key for WEP) FIXME
 
 
 // Name of the server we want to connect to
-const char kHostname[] = "44.202.225.24";  // FIXME
+const char kHostname[] = "34.238.220.95";  // FIXME
+const char* serverName = "http://34.238.220.95:5000";
 // Path to download (this is the bit after the hostname in the URL
 // that you want to download
 std::string kPath = "/?temp="; // FIXME
+
+// the following variables are unsigned longs because the time, measured in
+// milliseconds, will quickly become a bigger number than can be stored in an int.
+unsigned long lastTime = 0;
+// Timer set to 10 minutes (600000)
+//unsigned long timerDelay = 600000;
+// Set timer to 5 seconds (5000)
+unsigned long timerDelay = 5000;
 
 const int kport = 5000;
 
@@ -52,7 +63,7 @@ const int kNetworkDelay = 1000;
 void setup() { 
   Serial.begin(9600);
   delay(1000);
-  WiFi.mode(WIFI_STA);
+  //WiFi.mode(WIFI_STA);
   Serial.println("scan start");
 
   // WiFi.scanNetworks will return the number of networks found
@@ -121,10 +132,10 @@ void loop() {
   display();
   delay(30);
 
-  int err =0;
+  //int err =0;
   
-  WiFiClient c;
-  HttpClient http(c);
+  WiFiClient client;
+  HTTPClient http;
   std::ostringstream ss;
   std::ostringstream uu;
   ss << moistValue;
@@ -133,76 +144,20 @@ void loop() {
   std::string uv(uu.str());
   kPath = "/?Soil_Moisture=" + s + "&UV_Sensor=" + uv;
   const char* path = kPath.c_str();
-  err = http.get(kHostname, kport, path);
-  if (err == 0)
-  {
-    Serial.println("startedRequest ok");
+  http.begin(client, serverName);
 
-    err = http.responseStatusCode();
-    if (err >= 0)
-    {
-      Serial.print("Got status code: ");
-      Serial.println(err);
-
-      // Usually you'd check that the response code is 200 or a
-      // similar "success" code (200-299) before carrying on,
-      // but we'll print out whatever response we get
-
-      err = http.skipResponseHeaders();
-      if (err >= 0)
-      {
-        int bodyLen = http.contentLength();
-        Serial.print("Content length is: ");
-        Serial.println(bodyLen);
-        Serial.println();
-        Serial.println("Body returned follows:");
-      
-        // Now we've got to the body, so we can print it out
-        unsigned long timeoutStart = millis();
-        char c;
-        // Whilst we haven't timed out & haven't reached the end of the body
-        while ( (http.connected() || http.available()) &&
-               ((millis() - timeoutStart) < kNetworkTimeout) )
-        {
-            if (http.available())
-            {
-                c = http.read();
-                // Print out this character
-                Serial.print(c);
-               
-                bodyLen--;
-                // We read something, reset the timeout counter
-                timeoutStart = millis();
-            }
-            else
-            {
-                // We haven't got any data, so let's pause to allow some to
-                // arrive
-                delay(kNetworkDelay);
-            }
-        }
-      }
-      else
-      {
-        Serial.print("Failed to skip response headers: ");
-        Serial.println(err);
-      }
-    }
-    else
-    {    
-      Serial.print("Getting response failed: ");
-      Serial.println(err);
-    }
-  }
-  else
-  {
-    Serial.print("Connect failed: ");
-    Serial.println(err);
-  }
-  http.stop();
-
-  // And just stop, now that we've tried a download
-  //while(1);
+  // Specify content-type header
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  // Data to send with HTTP POST
+  //String httpRequestData = "&Soil_Moisture=" + s + "&UV_Sensor=" + uv;           
+  // Send HTTP POST request
+  int httpResponseCode = http.POST(path);
+     
+  Serial.print("HTTP Response code: ");
+  Serial.println(httpResponseCode);
+        
+  // Free resources
+  //http.end();
 } 
 
 
@@ -248,3 +203,4 @@ void display(){
   tft.drawFloat(0, 0, x, y, 4);
   delay(500);
 }
+
