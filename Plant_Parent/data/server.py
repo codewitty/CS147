@@ -25,6 +25,14 @@ def result():
        data = f.read().split(',')
        return render_template("results.html",data = data)
 
+@app.route('/dash',methods = ['POST', 'GET'])
+def dash():
+   if request.method == 'GET':
+       print("Inside POST")
+       f = open('data.txt', 'r')
+       data = f.read().split(',')
+       return render_template("dashboard.html",data = data)
+
 
 
 if __name__ == '__main__':
