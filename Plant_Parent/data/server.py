@@ -29,9 +29,14 @@ def result():
 def dash():
    if request.method == 'GET':
        print("Inside POST")
-       f = open('data.txt', 'r')
-       data = f.read().split(',')
-       return render_template("dashboard.html",data = data)
+       data = []
+       with open('data.txt') as f:
+            for i in f:
+                i_strip = i.rstrip("\n")
+                data.append(tuple(i_strip.split(',')))
+
+        print(float(data[0][1]))
+        return render_template("dashboard.html",data = data)
 
 
 
