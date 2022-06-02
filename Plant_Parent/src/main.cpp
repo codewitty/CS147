@@ -8,7 +8,6 @@
 #include <Arduino_JSON.h>
 
 
-
 int soilMoistureSensor();
 int uvSensor();
 void display();
@@ -30,13 +29,16 @@ float uvIntensity = 0;
 //char ssid[] = "dunder_mifflin";    // your network SSID (name) FIXME
 //char pass[] = "thatswhatshesaid69"; // your network password (use for WPA, or use as key for WEP) FIXME
 
-char ssid[] = "UCInet Mobile Access";    // your network SSID (name) FIXME
-char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
+// char ssid[] = "UCInet Mobile Access";    // your network SSID (name) FIXME
+// char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
+
+char ssid[] = "Uba Uba Guata";    // your network SSID (name) FIXME
+char pass[] = "L0QueY0Quier0EsUnaGata"; // your network password (use for WPA, or use as key for WEP) FIXME
 
 
 // Name of the server we want to connect to
-const char kHostname[] = "3.234.140.164";  // FIXME
-const char* serverName = "http://3.234.140.164:5000";
+const char kHostname[] = "192.168.10.174";  // FIXME
+const char* serverName = "http://192.168.10.174:5000";
 // Path to download (this is the bit after the hostname in the URL
 // that you want to download
 std::string kPath = "/?temp="; // FIXME
@@ -55,6 +57,9 @@ const int kport = 5000;
 const int kNetworkTimeout = 30*1000;
 // Number of milliseconds to wait if no data is available before trying again
 const int kNetworkDelay = 1000;
+
+WiFiClient client;
+HTTPClient http;
 
 
 void setup() { 
@@ -123,18 +128,17 @@ void loop() {
   delay(30);
 
   //int err =0;
-  
-  WiFiClient client;
-  HTTPClient http;
   std::ostringstream ss;
   std::ostringstream uu;
+  
   ss << moistValue;
   uu << uvValue;
+
   std::string s(ss.str());
   std::string uv(uu.str());
   Serial.println("Just Before sending Soil Moisture Sensor: ");
   Serial.println(moistValue);
-  kPath = "/?Soil_Moisture=" + s + "&UV_Sensor=" + uv;
+  kPath = "Soil_Moisture=" + s + "&UV_Sensor=" + uv;
   const char* path = kPath.c_str();
   http.begin(client, serverName);
 
