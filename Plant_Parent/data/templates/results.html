@@ -5,43 +5,33 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="../static/css/screen.css" />
 	<title>Plant Parent</title>
-    <script>
-    window.onload = function() {
-        var moisture = data[0][0]
-        if(moisture < 20.0) {
-            document.getElementById('imgCont').src = "../static/sad.jpeg";
-        } else {
-            document.getElementById('imgCont').src  = "../static/happy.png";
-        }
-    }
-    </script>
 </head>
 
 <body>
     
     <div class="header">
-        <div class="headerTitle">Plant Parent</div>
+        <div class="headerTitle" style="text-align:center">Plant Parent </div>
     </div>
-    <h1>Results:</h1>
-    <p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data[0][0] }} <b>UV Sensor Value :</b> {{ data[0][1] }}</p> 
+    <p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data[0][0] }} <br> <b>UV Sensor Value :</b> {{ data[0][1] }}</p> 
 
     <script>
     var data = {{ data }}
     window.onload = function() {
         var moisture = data[0][0]
-        console.log("Moisture is: ")
-        console.log(moisture);
         if(moisture < 20.0) {
             var imgCont = "../static/sad.webp";
+            var msg = "Your plant is sad, please water it!!"
         } else {
             var imgCont = "../static/happy.jpeg";
+            var msg = "Your plant is happy, keep up the good work!!"
         }
-        console.log(imgCont);
         document.getElementById("imgCont").src=imgCont;
+        result.textContent = msg;
     }
     </script>
 
     <img id="imgCont" alt=""  width="500" height="600" class="center"/>
+     <div class="center" style="margin-top: 10px;" id="result"></div>
 </body>
 
 </html>
