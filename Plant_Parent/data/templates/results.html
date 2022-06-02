@@ -5,25 +5,43 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" href="../static/css/screen.css" />
 	<title>Plant Parent</title>
+    <script>
+    window.onload = function() {
+        var moisture = data[0][0]
+        if(moisture < 20.0) {
+            document.getElementById('imgCont').src = "../static/sad.jpeg";
+        } else {
+            document.getElementById('imgCont').src  = "../static/happy.png";
+        }
+    }
+    </script>
 </head>
 
-<body onload="initialize()">
-		
-		<div class="header">
-			<div class="headerTitle">Plant Parent</div>
-		</div>
-		<h1>Results:</h1>
-		<p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data[0] }} <b>UV Sensor Value :</b> {{ data[1] }}</p> 
-		<img id="img" onclick="myFunction()" src="../static/happy.png" , width="400" height="400">
-		<script>
-		function myFunction() {
-			var image = document.getElementById("img");
-			if(image.src.match("../static/happy.jpeg")) {
-				image.src = "../static/sad.jpeg";
-			} else {
-				image.src = "../static/happy.jpeg";
-			}
-		</script>
+<body>
+    
+    <div class="header">
+        <div class="headerTitle">Plant Parent</div>
+    </div>
+    <h1>Results:</h1>
+    <p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data[0][0] }} <b>UV Sensor Value :</b> {{ data[0][1] }}</p> 
+
+    <script>
+    var data = {{ data }}
+    window.onload = function() {
+        var moisture = data[0][0]
+        console.log("Moisture is: ")
+        console.log(moisture);
+        if(moisture < 20.0) {
+            var imgCont = "../static/sad.webp";
+        } else {
+            var imgCont = "../static/happy.jpeg";
+        }
+        console.log(imgCont);
+        document.getElementById("imgCont").src=imgCont;
+    }
+    </script>
+
+    <img id="imgCont" alt=""  width="500" height="600" class="center"/>
 </body>
 
 </html>

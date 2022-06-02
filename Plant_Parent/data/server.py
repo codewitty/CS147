@@ -20,25 +20,45 @@ def hello():
 @app.route('/result',methods = ['POST', 'GET'])
 def result():
    if request.method == 'GET':
-       print("Inside POST")
-       f = open('data.txt', 'r')
-       data = f.read().split(',')
-       return render_template("results.html",data = data)
-
-@app.route('/dash',methods = ['POST', 'GET'])
-def dash():
-   if request.method == 'GET':
-       print("Inside POST")
-       data = []
-       with open('data.txt') as f:
+        data = []
+        with open('data.txt') as f:
             for i in f:
+                if i == "\n":
+                    continue
                 i_strip = i.rstrip("\n")
-                data.append(tuple(i_strip.split(',')))
+                d = list(i_strip.split(','))
+                if d[1] == "":
+                    continue
+                else:
+                    d[0] = float(d[0])
+                    d[1] = float(d[1])
+                    data.append(d)
+        print(f'Data:{data}')
+        data2 = []
+        data2.append(data[-1])
+        labels = [row[0] for row in data]
+        values = [row[1] for row in data]
+        return render_template("results.html",data = data2)
 
-        print(float(data[0][1]))
-        return render_template("dashboard.html",data = data)
-
-
+@app.route('/dashboard',methods = ['POST', 'GET'])
+def dashboard():
+    data = []
+    with open('data.txt') as f:
+        for i in f:
+            if i == "\n":
+                continue
+            i_strip = i.rstrip("\n")
+            d = list(i_strip.split(','))
+            if d[1] == "":
+                continue
+            else:
+                d[1] = float(d[1])
+                data.append(d)
+    print(f'Data:{data}')
+    labels = [row[0] for row in data]
+    values = [row[1] for row in data]
+    print(labels)
+    return render_template("dash.html",title = 'Bitcoin price', labels = labels, values = values)
 
 if __name__ == '__main__':
     app.run(debug=True)

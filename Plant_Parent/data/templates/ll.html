@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Moisture and UV visualization Chart </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+</head>
+
+<body>
+    <canvas id="lineChart" width="900" height="400"></canvas>
+    <script>
+        var ctx = document.getElementByID("lineChart").getContext("2d");
+        var lineChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: {{ labels | safe }}
+                datasets: [
+                    {
+                        label: "Data Points",
+                        data: {{ values | safe }},
+                        fill: false,
+                        borderColor: "rgb(75, 192, 192)",
+                        lineTension:0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: false
+                }
+            });
+    </script>
+</body>
+
+</html>

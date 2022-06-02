@@ -2,13 +2,12 @@ data = []
 with open('data.txt') as f:
     for i in f:
         i_strip = i.rstrip("\n")
-        data.append(list(i_strip.split(',')))
+        print(i)
+        print(type(i))
+        d = list(i_strip.split(','))
+        print(f'First element of d: {d[1]}')
+        d[1] = float(d[1])
+        data.append(d)
+        print(f'Data:{data}')
     i = 0
-    for d in data:
-        print(d)
-        d = [d[i][0], float(d[i][1])]
-        i += 1
-        print(d)
-
-print(float(data[0][1]))
-print(data)
+print(f'Data Final:{data}')
