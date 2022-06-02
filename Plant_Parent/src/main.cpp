@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <TFT_eSPI.h>
 #include <Wire.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -19,11 +18,6 @@ void display();
 #define UVIN 37 
 #define REF_3v3 38
 
-// never comment, needed for everything...
-TFT_eSPI tft = TFT_eSPI();  // Invoke library, pins defined in User_Setup.h
-int x = tft.width() / 2;
-int y = tft.height() / 2;
-
 float moistValue = 0; 
 int refValue = 0;
 int uvValue = 0;
@@ -33,13 +27,16 @@ float uvIntensity = 0;
 
 // WiFi set up
 
-char ssid[] = "dunder_mifflin";    // your network SSID (name) FIXME
-char pass[] = "thatswhatshesaid69"; // your network password (use for WPA, or use as key for WEP) FIXME
+//char ssid[] = "dunder_mifflin";    // your network SSID (name) FIXME
+//char pass[] = "thatswhatshesaid69"; // your network password (use for WPA, or use as key for WEP) FIXME
+
+char ssid[] = "UCInet Mobile Access";    // your network SSID (name) FIXME
+char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
 
 
 // Name of the server we want to connect to
-const char kHostname[] = "34.238.220.95";  // FIXME
-const char* serverName = "http://34.238.220.95:5000";
+const char kHostname[] = "3.234.140.164";  // FIXME
+const char* serverName = "http://3.234.140.164:5000";
 // Path to download (this is the bit after the hostname in the URL
 // that you want to download
 std::string kPath = "/?temp="; // FIXME
@@ -108,11 +105,6 @@ void setup() {
   Serial.println("MAC address: ");
   Serial.println(WiFi.macAddress());
 
-  tft.init();
-  tft.setRotation(0);
-  tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_GREEN, TFT_BLACK);  // Adding a black background colour erases previous text automatically
-
   pinMode(UVIN, INPUT);
 } 
 
@@ -128,8 +120,6 @@ void loop() {
   uvValue = uvSensor();
   Serial.print("UV Sensor: ");
   Serial.println(uvValue);
-  // Print to ESP32
-  display();
   delay(30);
 
   //int err =0;
@@ -142,6 +132,8 @@ void loop() {
   uu << uvValue;
   std::string s(ss.str());
   std::string uv(uu.str());
+  Serial.println("Just Before sending Soil Moisture Sensor: ");
+  Serial.println(moistValue);
   kPath = "/?Soil_Moisture=" + s + "&UV_Sensor=" + uv;
   const char* path = kPath.c_str();
   http.begin(client, serverName);
@@ -188,19 +180,3 @@ int uvSensor(){
 
   return uvValue;
 }
-
-void display(){
-  tft.setTextDatum(TC_DATUM); // Centre text on x,y
-  tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_GREEN, TFT_BLACK);  // Adding a black background colour erases previous text automatically
-  tft.setCursor(x, y, 2);
-
-  tft.drawString("Soil Moisture Sensor:", x, y-50, 4);
-  //tft.drawFloat(moistValue, 0, x, y-25, 4);
-
-  tft.drawString("UV:", x, y+25, 4);
-  //tft.drawFloat(uvValue, 0, x, y+50, 4);
-  tft.drawFloat(0, 0, x, y, 4);
-  delay(500);
-}
-
