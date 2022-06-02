@@ -10,13 +10,14 @@ app = Flask(__name__)
 def hello():
     data = []
     moisture = str(request.values.get("Soil_Moisture"))
+    print(f'Moisture: {moisture}')
     data.append(moisture)
     UV = str(request.values.get("UV_Sensor"))
     data.append(UV)
     string = f'Moisture: {moisture}, UV intensity:{UV}'
     print(string)
     f = open("data.txt", "a")
-    f.write(data[0] + "," + data[1])
+    f.write(data[0] + "," + data[1] + "\n")
     f.close()
     return render_template("results.html",data = data)
 
@@ -35,24 +36,24 @@ def result():
        pred = response.json()
        weather = pred['weather']
        rain = weather[0]['main']
+       print(f'Rain: {rain}')
    if response2.status_code == 200:
        pred = response2.json()
        uv = pred['result']['uv_max']
        print(uv)
    if request.method == 'GET':
-        data = []
+        data = [[0,0]]
         with open('data.txt') as f:
             for i in f:
                 if i == "\n":
                     continue
                 i_strip = i.rstrip("\n")
                 d = list(i_strip.split(','))
-                if d[1] == "":
+                if d[1] == "" or d[1] == 'None' or d[0] == "" or d[0] == "None":
                     continue
-                else:
-                    d[0] = float(d[0])
-                    d[1] = float(d[1])
-                    data.append(d)
+                d[0] = float(d[0])
+                d[1] = float(d[1])
+                data.append(d)
         print(f'Data:{data}')
         data2 = []
         data2.append(data[-1])
@@ -69,16 +70,16 @@ def dashboard():
                 continue
             i_strip = i.rstrip("\n")
             d = list(i_strip.split(','))
-            if d[1] == "":
+            if d[1] == "" or d[1] == 'None' or d[0] == "" or d[0] == "None":
                 continue
-            else:
-                d[1] = float(d[1])
-                data.append(d)
+            d[0] = float(d[0])
+            d[1] = float(d[1])
+            data.append(d)
     print(f'Data:{data}')
     labels = [row[0] for row in data]
     values = [row[1] for row in data]
     print(labels)
-    return render_template("dash.html",title = 'Bitcoin price', labels = labels, values = values)
+    return render_template("dashboard.html",title = 'Bitcoin price', labels = labels, values = values)
 
 if __name__ == '__main__':
     app.run(debug=True)
