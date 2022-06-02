@@ -20,7 +20,7 @@ def hello():
     f.close()
     return render_template("results.html",data = data)
 
-@app.route('/result',methods = ['POST', 'GET'])
+@app.route('/results',methods = ['POST', 'GET'])
 def result():
    headers = {
        'x-access-token': '12b0901d3e6ccd9b6e1b8bd473d63515',
@@ -58,7 +58,7 @@ def result():
         data2.append(data[-1])
         labels = [row[0] for row in data]
         values = [row[1] for row in data]
-        return render_template("results.html",data = data2, rain = rain)
+        return render_template("results.html",data = data2, rain = rain, uv = uv)
 
 @app.route('/dashboard',methods = ['POST', 'GET'])
 def dashboard():
