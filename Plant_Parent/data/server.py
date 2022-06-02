@@ -1,5 +1,8 @@
 from flask import Flask, render_template, redirect, url_for
 from flask import request
+import requests
+from datetime import date
+
 
 app = Flask(__name__)
 
@@ -19,6 +22,23 @@ def hello():
 
 @app.route('/result',methods = ['POST', 'GET'])
 def result():
+   headers = {
+       'x-access-token': '12b0901d3e6ccd9b6e1b8bd473d63515',
+       }
+   response = requests.get("https://api.openweathermap.org/data/2.5/weather?lat=33.7&lon=-117.8&appid=9e45703d4ebce98a50d6970fda54c452")
+   today = str(date.today())
+   string = 'https://api.openuv.io/api/v1/uv?lat=-33.7&lng=117.8&' + 'dt=' + today + 'T10:50:52.283Z'
+   response2 = requests.get(string, headers=headers)
+   rain = "None"
+   uv = "None"
+   if response.status_code == 200:
+       pred = response.json()
+       weather = pred['weather']
+       rain = weather[0]['main']
+   if response2.status_code == 200:
+       pred = response2.json()
+       uv = pred['result']['uv_max']
+       print(uv)
    if request.method == 'GET':
         data = []
         with open('data.txt') as f:
@@ -38,7 +58,7 @@ def result():
         data2.append(data[-1])
         labels = [row[0] for row in data]
         values = [row[1] for row in data]
-        return render_template("results.html",data = data2)
+        return render_template("results.html",data = data2, rain = rain)
 
 @app.route('/dashboard',methods = ['POST', 'GET'])
 def dashboard():
