@@ -1,13 +1,16 @@
+from datetime import date
+import datetime
+from datetime import datetime
+import time
+
+t = time.localtime()
+current_time = time.strftime("%H:%M", t)
+print(current_time)
+
+
 data = []
-with open('data.txt') as f:
-    for i in f:
-        i_strip = i.rstrip("\n")
-        print(i)
-        print(type(i))
-        d = list(i_strip.split(','))
-        print(f'First element of d: {d[1]}')
-        d[1] = float(d[1])
-        data.append(d)
-        print(f'Data:{data}')
-    i = 0
-print(f'Data Final:{data}')
+
+l = [343, 545, 434, 445, 565, 67, 78, 989, 766, 555, 676, 544, 454, 433, 454, 234]
+
+
+

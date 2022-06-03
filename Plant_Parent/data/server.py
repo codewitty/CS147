@@ -6,23 +6,19 @@ from datetime import date
 
 app = Flask(__name__)
 
-@app.route("/", methods=['GET', 'POST'])
-def hello():
-    data = []
-    moisture = str(request.values.get("Soil_Moisture"))
-    print(f'Moisture: {moisture}')
-    data.append(moisture)
-    UV = str(request.values.get("UV_Sensor"))
-    data.append(UV)
-    string = f'Moisture: {moisture}, UV intensity:{UV}'
-    print(string)
-    f = open("data.txt", "a")
-    f.write(data[0] + "," + data[1] + "\n")
-    f.close()
-    return render_template("results.html",data = data)
-
-@app.route('/results',methods = ['POST', 'GET'])
+@app.route("/",methods = ['POST', 'GET'])
 def result():
+   data = []
+   moisture = str(request.values.get("Soil_Moisture"))
+   print(f'Moisture: {moisture}')
+   data.append(moisture)
+   UV = str(request.values.get("UV_Sensor"))
+   data.append(UV)
+   string = f'Moisture: {moisture}, UV intensity:{UV}'
+   print(string)
+   f = open("data.txt", "a")
+   f.write(data[0] + "," + data[1] + "\n")
+   f.close()
    headers = {
        'x-access-token': '12b0901d3e6ccd9b6e1b8bd473d63515',
        }
@@ -30,16 +26,19 @@ def result():
    today = str(date.today())
    string = 'https://api.openuv.io/api/v1/uv?lat=-33.7&lng=117.8&' + 'dt=' + today + 'T10:50:52.283Z'
    response2 = requests.get(string, headers=headers)
-   rain = "None"
-   uv = "None"
+   rain = []
+   uv = []
    if response.status_code == 200:
        pred = response.json()
        weather = pred['weather']
-       rain = weather[0]['main']
-       print(f'Rain: {rain}')
+       #rain.append(weather[0]['main'])
+       rain.append("Clear")
+       print(f'Rain: {rain[0]}')
    if response2.status_code == 200:
        pred = response2.json()
-       uv = pred['result']['uv_max']
+       print(pred)
+       #uv.append(pred['result']['uv_max'])
+       uv.append(8.0)
        print(uv)
    if request.method == 'GET':
         data = [[0,0]]
@@ -54,17 +53,15 @@ def result():
                 d[0] = float(d[0])
                 d[1] = float(d[1])
                 data.append(d)
-        print(f'Data:{data}')
         data2 = []
         data2.append(data[-1])
-        labels = [row[0] for row in data]
-        values = [row[1] for row in data]
         return render_template("results.html",data = data2, rain = rain, uv = uv)
 
 @app.route('/dashboard',methods = ['POST', 'GET'])
 def dashboard():
     data = []
-    with open('data.txt') as f:
+    data_uv = []
+    with open('data2.txt') as f:
         for i in f:
             if i == "\n":
                 continue
@@ -72,14 +69,27 @@ def dashboard():
             d = list(i_strip.split(','))
             if d[1] == "" or d[1] == 'None' or d[0] == "" or d[0] == "None":
                 continue
-            d[0] = float(d[0])
             d[1] = float(d[1])
             data.append(d)
-    print(f'Data:{data}')
+    with open('data3.txt') as f:
+        for i in f:
+            if i == "\n":
+                continue
+            i_strip = i.rstrip("\n")
+            d = list(i_strip.split(','))
+            if d[1] == "" or d[1] == 'None' or d[0] == "" or d[0] == "None":
+                continue
+            d[1] = float(d[1])
+            data_uv.append(d)
     labels = [row[0] for row in data]
     values = [row[1] for row in data]
-    print(labels)
-    return render_template("dashboard.html",title = 'Bitcoin price', labels = labels, values = values)
+    labels_uv = [row[0] for row in data_uv]
+    values_uv = [row[1] for row in data_uv]
+    print(f'Labels: {labels}')
+    print(f'Values: {values}')
+    print(f'Labels_UV: {labels_uv}')
+    print(f'Values_UV: {values_uv}')
+    return render_template("dashboard.html", labels = labels, values = values, labels_uv = labels_uv, values_uv = values_uv)
 
 if __name__ == '__main__':
     app.run(debug=True)

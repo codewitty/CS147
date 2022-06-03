@@ -10,16 +10,41 @@
 	<title>Plant Parent</title>
 </head>
 
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 50.0%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
 
 <body>
     
     <div class="header">
         <div class="headerTitle" style="text-align:center"><img src="https://see.fontimg.com/api/renderfont4/ow3D4/eyJyIjoiZnMiLCJoIjo4MSwidyI6MTI1MCwiZnMiOjY1LCJmZ2MiOiIjMDAwMDAwIiwiYmdjIjoiI0ZGRkZGRiIsInQiOjF9/74CPbGFudCBwYXJlbu-AtQ/anilupa.png" alt="Plant Parent"></a> </div>
     </div>
+    <br>
+    <br>
+    <br>
+    <h2>Plant Vitals: </h2> 
     <p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data[0][0] }} <br><br> <b>UV Sensor Value :</b> {{ data[0][1] }}</p> 
 
     <script>
-    var data = {{ data }}
+    var data = {{ data | safe }}
+    var clouds = {{ rain | safe }};
+    var uv = {{ uv | safe }};
     window.onload = function() {
         var moisture = data[0][0]
         if(moisture < 20.0) {
@@ -31,11 +56,51 @@
         }
         document.getElementById("imgCont").src=imgCont;
         result.textContent = msg;
+        var rain = clouds[0]
+        var msg4 = "Keep plant outdoors"
+        if(rain == "Rain") {
+            var imgCont2 = "../static/cloud.jpeg";
+            var msg2 = "Looks like there's some rain on the horizon, an indoor plant would be a happier plant!!"
+        } else {
+            var imgCont2 = "../static/clear_day.jpeg";
+            var msg2 = "The weather forecast is " + rain
+            var msg4 = "Bring plant indoors"
+        }
+        document.getElementById("imgCont2").src=imgCont2;
+        result2.textContent = msg2;
+        var uvi = uv[0]
+        if(uvi < 6.0) {
+            var imgCont3 = "../static/happySun.jpeg";
+            var msg3 = "UV conditions are perfect!!"
+        } else {
+            var imgCont3 = "../static/angrySun.jpeg";
+            var msg3 = "UVI is extremely high, some shade would be ideal!!"
+            var msg4 = "Bring plant indoors"
+        }
+        document.getElementById("imgCont3").src=imgCont3;
+        result3.textContent = msg3;
+        result4.textContent = msg4;
     }
     </script>
 
-    <img id="imgCont" alt=""  width="500" height="600" class="center"/>
+
+    <img id="imgCont" alt=""  width="350" height="400" class="center"/>
     <div class="center" style="margin-top: 10px;" id="result"></div>
+    <br>
+    <h2>Weather Forecast</h2> 
+    <div class="row">
+      <div class="column">
+        <img id="imgCont2" alt=""  width="90" height="90">
+        <p style="margin-top: 10px;" id="result2"></p>
+      </div>
+      <div class="column">
+        <img id="imgCont3" alt=""  width="90" height="90">
+        <p style="margin-top: 10px;" id="result3"></p>
+      </div>
+    </div>
+    <br>
+    <h2>Verdict: </h2> 
+    <div class="center" style="margin-top: 10px;" id="result4"></div>
 </body>
 
 </html>
