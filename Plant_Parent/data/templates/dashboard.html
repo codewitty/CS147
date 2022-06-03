@@ -4,62 +4,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
     <title> Moisture and UV visualization Chart </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 </head>
 
-<body>
-		<div class="header">
-			<div class="headerTitle">Plant Parent</div>
-		</div>
-        <canvas id="lineChart" width="900" height="400"></canvas>
-        <br>
-        <br>
-        <br>
-        <canvas id="lineChart2" width="900" height="400"></canvas>
+<style>
+    h2 {
+        padding: 0;
+        text-align: center;
+        font-family: 'Abel';
+        font-size: 40px;
+        color: #001C06;
+        margin-top: 20px;
+        margin-left: 40px;
+    }
+    p {
+    text-align: center;
+    font-family: 'Abel';
+    
+    font-size: 25px;
+    color: #001C06;
+    margin:0 auto;
+    margin-top: 35px;
+    },
+    .center {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin:0 auto;
+    }
+</style>
 
-        <script>
-            var ctx = document.getElementById("lineChart").getContext("2d");
-            var lineChart = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: {{ labels | safe }},
-                    datasets: [
-                        {
-                            label: "Soil Moisture",
-                            data: {{ values | safe }},
-                            fill: false,
-                            borderColor: "rgb(75, 192, 192)",
-                            lineTension:0.1
-                            }
-                        ]
+<body>
+    <div class="header">
+        <div class="headerTitle" style="text-align:center"><img src="https://see.fontimg.com/api/renderfont4/ow3D4/eyJyIjoiZnMiLCJoIjo4MSwidyI6MTI1MCwiZnMiOjY1LCJmZ2MiOiIjMDAwMDAwIiwiYmdjIjoiI0ZGRkZGRiIsInQiOjF9/74CPbGFudCBwYXJlbu-AtQ/anilupa.png" alt="Plant Parent"></a></div>
+    </div>
+    <p>Plant Parent has been recording the latest sensor values for you...
+    <br>
+    Have you been properly caring for your plant? Have a look at the charts below to find out and try to keep your plant above the "Danger Zone"!</p>
+    <div class="headerTitle" style="text-align:center"><img src=https://th.bing.com/th/id/R.e44f6ff1e8d83ae4c8cbfe6040d335a4?rik=o437ju2sGYokhw&riu=http%3a%2f%2fwww.susansdailydose-2012.com%2fresources%2fMay_2015%2f1541232YiObXTVJ.gif%3ftimestamp%3d1433019766071&ehk=FUADFkA6gF7%2frZpeN1jV0yEGm9Q%2fkUq2vKv0UQnCnHs%3d&risl=&pid=ImgRaw&r=0></div>
+    <h2>Last Recorded Soil Moisture Sensor Values: </h2> 
+    <canvas id="lineChart" width="1500" height="400"></canvas >
+    <br>
+    <br>
+    <br>
+    <h2>Last Recorded UV Sensor Values: </h2> 
+    <canvas id="lineChart2" width="1500" height="400"></canvas>
+
+    
+
+    <script>
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var lineChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: {{ labels | safe }},
+                datasets: [
+                    {
+                        label: "Soil Moisture",
+                        data: {{ values | safe }},
+                        fill: false,
+                        pointStyle:'star',
+                        pointBackgroundColor:"rgb(0, 0, 255)",
+                        backgroundColor:"rgb(0, 255, 255)",
+                        pointRadius:6,
+                        pointBorderColor:"rgb(0, 0, 255)",
+                        borderColor: "rgb(0, 255, 255)",
+                        pointHoverBorderColor:"rgb(0, 0, 0)",
+                        lineTension:0.1
                     },
-                    options: {
-                        responsive: false
+                    {
+                        label:"Danger Zone!",
+                        data:[20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0],
+                        fill: true,
+                        radius:0,
+                        borderColor:"rgb(255, 0, 0)",
+                        backgroundColor:"rgb(255,99,71)",
+                        lineTension:0.1
                     }
-                    });
-        </script>
-        <script>
-            var dtx = document.getElementById("lineChart2").getContext("2d");
-            var lineChart2 = new Chart(dtx, {
-                type: "line",
-                data: {
-                    labels: {{ labels_uv | safe }},
-                    datasets: [
-                        {
-                            label: "UV Values",
-                            data: {{ values_uv | safe }},
-                            fill: false,
-                            borderColor: "rgb(75, 192, 192)",
-                            lineTension:0.1
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: false
-                    }
+                    ]
+                },
+                options: {
+                    responsive: false
+                },
                 });
-        </script>
+    </script>
+    <script>
+        var dtx = document.getElementById("lineChart2").getContext("2d");
+        var lineChart2 = new Chart(dtx, {
+            type: "line",
+            data: {
+                labels: {{ labels_uv | safe }},
+                datasets: [
+                    {
+                        label: "UV Values",
+                        data: {{ values_uv | safe }},
+                        fill: false,
+                        borderColor: "rgb(0, 255, 0)",
+                        lineTension:0.1,
+                        backgroundColor:"rgb(0, 255, 0)",
+                        pointStyle:'star',
+                        pointBackgroundColor:"rgb(34,139,34)",
+                        pointRadius:6,
+                        pointBorderColor:"rgb(34,139,34)",
+                        pointHoverBorderColor:"rgb(0, 0, 0)"
+                        },
+                        {
+                        label:"Danger Zone!",
+                        data:[6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0],
+                        fill: true,
+                        radius:0,
+                        borderColor:"rgb(255, 0, 0)",
+                        backgroundColor:"rgb(255,99,71)",
+                        lineTension:0.1
+                    }
+                    ]
+                },
+                options: {
+                    responsive: false
+                },
+            });
+    </script>
 </body>
 
 </html>
