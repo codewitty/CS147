@@ -26,14 +26,8 @@ float uvIntensity = 0;
 
 // WiFi set up
 
-//char ssid[] = "dunder_mifflin";    // your network SSID (name) FIXME
-//char pass[] = "thatswhatshesaid69"; // your network password (use for WPA, or use as key for WEP) FIXME
-
-// char ssid[] = "UCInet Mobile Access";    // your network SSID (name) FIXME
-// char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
-
-char ssid[] = "Uba Uba Guata";    // your network SSID (name) FIXME
-char pass[] = "L0QueY0Quier0EsUnaGata"; // your network password (use for WPA, or use as key for WEP) FIXME
+char ssid[] = "UCInet Mobile Access";    // your network SSID (name) FIXME
+char pass[] = ""; // your network password (use for WPA, or use as key for WEP) FIXME
 
 
 // Name of the server we want to connect to

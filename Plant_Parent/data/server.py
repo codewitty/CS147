@@ -19,9 +19,9 @@ def result():
    f.write(data[0] + "," + data[1] + "\n")
    f.close()
    headers = {
-       'x-access-token': '12b0901d3e6ccd9b6e1b8bd473d63515',
+       'x-access-token': 'YOUR UV API ACCESS TOKEN HERE',
        }
-   response = requests.get("https://api.openweathermap.org/data/2.5/weather?lat=33.7&lon=-117.8&appid=9e45703d4ebce98a50d6970fda54c452")
+   response = requests.get("https://api.openweathermap.org/data/2.5/weather?lat=33.7&lon=-117.8&appid=OPEN WEATHER ACCESS KEY HERE")
    today = str(date.today())
    string = 'https://api.openuv.io/api/v1/uv?lat=-33.7&lng=117.8&' + 'dt=' + today + 'T10:50:52.283Z'
    response2 = requests.get(string, headers=headers)
