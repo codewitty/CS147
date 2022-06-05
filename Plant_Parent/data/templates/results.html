@@ -39,14 +39,14 @@
     <br>
     <br>
     <h2>Plant Vitals: </h2> 
-    <p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data[0][0] }} <br><br> <b>UV Sensor Value :</b> {{ data[0][1] }}</p> 
+    <p style="text-align:center"><b>Moisture Sensor Value :</b> {{ data3[0][0] }} <br><br> <b>UV Sensor Value :</b> {{ data3[0][1] }}</p> 
 
     <script>
-    var data = {{ data | safe }}
+    var data3 = {{ data3 | safe }}
     var clouds = {{ rain | safe }};
     var uv = {{ uv | safe }};
     window.onload = function() {
-        var moisture = data[0][0]
+        var moisture = data3[0][0]
         if(moisture < 20.0) {
             var imgCont = "../static/sad.webp";
             var msg = "Your plant is sad, please water it!!"
